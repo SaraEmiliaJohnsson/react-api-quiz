@@ -5,8 +5,13 @@ interface Category {
     name: string;
 }
 
+type WelcomeProps = {
+    setCategory: (categoryId: number) => void;
+    nextScreen: () => void;
+}
 
-const Welcome = ({ setCategory }: { setCategory: (categoryId: number) => void }) => {
+
+const Welcome = ({ setCategory, nextScreen }: WelcomeProps) => {
 
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
     const [categories, setCategories] = useState<Category[]>([]);
@@ -28,6 +33,7 @@ const Welcome = ({ setCategory }: { setCategory: (categoryId: number) => void })
     const handleStart = () => {
         if (selectedCategory !== null) {
             setCategory(selectedCategory.id)
+            nextScreen();
         } else {
             alert('Välj ett ämne innan du startar quizet!')
         }
