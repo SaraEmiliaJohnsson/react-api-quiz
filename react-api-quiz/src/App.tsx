@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import Welcome from './components/Welcome'
 import Game from './components/Game';
+import Result from './components/Result';
 
 enum Screen {
   WELCOME = 'welcome',
@@ -12,9 +13,15 @@ enum Screen {
 function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>(Screen.WELCOME);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const [score, setScore] = useState<number>(0);
 
   const handleCategorySelect = (categoryId: number) => {
     setSelectedCategoryId(categoryId);
+  }
+
+  const handleShowResult = (score: number) => {
+    setScore(score);
+    setCurrentScreen(Screen.RESULT);
   }
 
   let content: React.ReactElement | null = null
@@ -24,7 +31,10 @@ function App() {
       content = <Welcome setCategory={handleCategorySelect} nextScreen={() => setCurrentScreen(Screen.GAME)} />
       break;
     case Screen.GAME:
-      content = <Game categoryId={selectedCategoryId!} />
+      content = <Game categoryId={selectedCategoryId!} showResult={handleShowResult} />
+      break;
+    case Screen.RESULT:
+      content = <Result score={score} />
       break;
     default:
       content = null;

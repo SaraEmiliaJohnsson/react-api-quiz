@@ -14,7 +14,7 @@ type GameProps = {
 const Game = ({ categoryId, showResult }: GameProps) => {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [selectedAnswers, setSelectedAnswers] = useState<number[]>(new Array(questions.length).fill(-1));
+    const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
 
 
     useEffect(() => {
@@ -29,6 +29,7 @@ const Game = ({ categoryId, showResult }: GameProps) => {
                         correct: result.incorrect_answers.length
                     }));
                     setQuestions(formattedQuestions);
+                    setSelectedAnswers(new Array(formattedQuestions.length).fill(-1));
                     setIsLoading(false);
                 } else {
                     console.error('No results found');
@@ -60,18 +61,19 @@ const Game = ({ categoryId, showResult }: GameProps) => {
     return (
         <section>
             <h1>The quiz</h1>
-            {questions.map((question, index) => (
-                <div key={index}>
+            {questions.map((question, questionIndex) => (
+                <div key={questionIndex}>
                     <h3>{question.question}</h3>
                     <ul>
                         {question.answers.map((answer, answerIndex) => (
                             <li key={answerIndex}>
-                                <button type="button" onClick={() => handleAnswer(index, answerIndex)}>{answer}</button>
+                                <button type="button" onClick={() => handleAnswer(questionIndex, answerIndex)} className={selectedAnswers[questionIndex] === answerIndex ? 'selected' : ''}>{answer}</button>
                             </li>
                         ))}
                     </ul>
                 </div>
             ))}
+            <button type="button" onClick={handleSubmit}>Visa resultat</button>
         </section>
     )
 }
