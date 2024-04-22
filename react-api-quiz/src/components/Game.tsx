@@ -7,11 +7,15 @@ interface Question {
 }
 
 type GameProps = {
-    categoryId: number;
+    categoryId: number,
+    showResult: (score: number) => void;
 }
-const Game = ({ categoryId }: GameProps) => {
+
+const Game = ({ categoryId, showResult }: GameProps) => {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [selectedAnswers, setSelectedAnswers] = useState<number[]>(new Array(questions.length).fill(-1));
+
 
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -40,6 +44,19 @@ const Game = ({ categoryId }: GameProps) => {
         return <div>Loading...</div>;
     }
 
+    const handleAnswer = (index: number, selectedAnswerIndex: number) => {
+        const updatedSelectedAnswers = [...selectedAnswers];
+        updatedSelectedAnswers[index] = selectedAnswerIndex;
+        setSelectedAnswers(updatedSelectedAnswers);
+    };
+
+    const handleSubmit = () => {
+        const score = questions.reduce((acc, question, index) => {
+            return question.correct === selectedAnswers[index] ? acc + 1 : acc;
+        }, 0);
+        showResult(score);
+    };
+
     return (
         <section>
             <h1>The quiz</h1>
@@ -49,7 +66,7 @@ const Game = ({ categoryId }: GameProps) => {
                     <ul>
                         {question.answers.map((answer, answerIndex) => (
                             <li key={answerIndex}>
-                                <button>{answer}</button>
+                                <button type="button" onClick={() => handleAnswer(index, answerIndex)}>{answer}</button>
                             </li>
                         ))}
                     </ul>

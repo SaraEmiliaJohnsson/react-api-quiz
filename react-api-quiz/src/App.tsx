@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import './App.css'
 import Welcome from './components/Welcome'
+import Game from './components/Game';
 
 enum Screen {
   WELCOME = 'welcome',
-  GAME = 'game'
+  GAME = 'game',
+  RESULT = 'result'
 }
 
 function App() {
@@ -20,6 +22,9 @@ function App() {
   switch (currentScreen) {
     case Screen.WELCOME:
       content = <Welcome setCategory={handleCategorySelect} nextScreen={() => setCurrentScreen(Screen.GAME)} />
+      break;
+    case Screen.GAME:
+      content = <Game categoryId={selectedCategoryId!} />
       break;
     default:
       content = null;
