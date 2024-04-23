@@ -1,13 +1,15 @@
 
 type ResultProps = {
     score: number;
+    restartQuiz: () => void;
 }
 
-const Result = ({ score }: ResultProps) => {
+const Result = (props: ResultProps) => {
     return (
         <section>
             <h1>Resultat</h1>
-            <p>Ditt poäng: {score}</p>
+            <p>Ditt poäng: {props.score}</p>
+            <button type="button" onClick={props.restartQuiz}>Tillbaka till första sidan</button>
         </section>
     )
 }

@@ -24,6 +24,11 @@ function App() {
     setCurrentScreen(Screen.RESULT);
   }
 
+  const restartQuiz = () => {
+    setScore(0);
+    setCurrentScreen(Screen.WELCOME);
+  }
+
   let content: React.ReactElement | null = null
 
   switch (currentScreen) {
@@ -34,7 +39,7 @@ function App() {
       content = <Game categoryId={selectedCategoryId!} showResult={handleShowResult} />
       break;
     case Screen.RESULT:
-      content = <Result score={score} />
+      content = <Result score={score} restartQuiz={restartQuiz} />
       break;
     default:
       content = null;

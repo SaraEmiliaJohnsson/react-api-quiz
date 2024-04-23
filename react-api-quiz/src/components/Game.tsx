@@ -13,9 +13,27 @@ type GameProps = {
 
 const Game = ({ categoryId, showResult }: GameProps) => {
     const [questions, setQuestions] = useState<Question[]>([]);
+    const [categoryName, setCategoryName] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
 
+    useEffect(() => {
+        const fetchCategoryName = async () => {
+            try {
+                const response = await fetch(`https://opentdb.com/api_category.php`);
+                const data = await response.json();
+                const category = data.trivia_categories.find((cat: any) => cat.id === categoryId);
+                if (category) {
+                    setCategoryName(category.name);
+                } else {
+                    console.error('Category not found');
+                }
+            } catch (error) {
+                console.error('Error fetching category name', error);
+            }
+        };
+        fetchCategoryName();
+    }, [categoryId]);
 
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -59,21 +77,23 @@ const Game = ({ categoryId, showResult }: GameProps) => {
     };
 
     return (
-        <section>
-            <h1>The quiz</h1>
-            {questions.map((question, questionIndex) => (
-                <div key={questionIndex}>
-                    <h3>{question.question}</h3>
-                    <ul>
-                        {question.answers.map((answer, answerIndex) => (
-                            <li key={answerIndex}>
-                                <button type="button" onClick={() => handleAnswer(questionIndex, answerIndex)} className={selectedAnswers[questionIndex] === answerIndex ? 'selected' : ''}>{answer}</button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            ))}
-            <button type="button" onClick={handleSubmit}>Visa resultat</button>
+        <section className="game-container">
+            <section >
+                <h1>{categoryName}</h1>
+                {questions.map((question, questionIndex) => (
+                    <div className="question-container" key={questionIndex}>
+                        <h3>{question.question}</h3>
+                        <ul>
+                            {question.answers.map((answer, answerIndex) => (
+                                <li key={answerIndex}>
+                                    <button type="button" onClick={() => handleAnswer(questionIndex, answerIndex)} className={selectedAnswers[questionIndex] === answerIndex ? 'selected' : ''}>{answer}</button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
+            </section>
+            <button className="show-result-btn" type="button" onClick={handleSubmit}>Visa resultat</button>
         </section>
     )
 }

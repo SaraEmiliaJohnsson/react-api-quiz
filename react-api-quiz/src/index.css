@@ -39,6 +39,10 @@ ul {
   list-style: none;
 }
 
+select {
+  padding: 5px;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -60,7 +64,22 @@ button:focus-visible {
 }
 
 .selected {
-  border-color: #646cff;
+  background-color: #646cff;
+  border: 2px solid white;
+  font-weight: 800;
 }
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.question-container {
+  border: 2px solid #cecdcd;
+  margin: 4px;
+  padding: 10px;
+}
+
+
 
 
