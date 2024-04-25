@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { reducer as categoryReducer } from "./category.ts";
+import { categoryReducer } from "./category.ts";
 
 
 

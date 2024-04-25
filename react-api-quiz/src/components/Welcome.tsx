@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+
 interface Category {
     id: number;
     name: string;
@@ -28,11 +29,12 @@ const Welcome = ({ setCategory, nextScreen }: WelcomeProps) => {
         const categoryId = parseInt(event.target.value);
         const selectedCat = categories.find(cat => cat.id === categoryId);
         setSelectedCategory(selectedCat || null);
+        setCategory(categoryId);
     }
 
     const handleStart = () => {
         if (selectedCategory !== null) {
-            setCategory(selectedCategory.id)
+            // setCategory(selectedCategory.id)
             nextScreen();
         } else {
             alert('Välj ett ämne innan du startar quizet!')

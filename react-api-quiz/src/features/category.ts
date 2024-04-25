@@ -1,10 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { createAction } from "@reduxjs/toolkit";
-
-
-const setCategory = createAction<number>('set category');
-
-const actions = { setCategory };
+import { setCategory, resetCategory } from "./actions";
 
 interface State {
     selectedCategoryId: number | null;
@@ -14,11 +9,14 @@ const initialState: State = {
     selectedCategoryId: null
 };
 
-const reducer = createReducer(initialState, (builder) => {
+const categoryReducer = createReducer(initialState, (builder) => {
     builder
         .addCase(setCategory, (state, action) => {
             state.selectedCategoryId = action.payload;
+        })
+        .addCase(resetCategory, (state) => {
+            state.selectedCategoryId = null;
         });
 });
 
-export { reducer, actions };
+export { categoryReducer };
