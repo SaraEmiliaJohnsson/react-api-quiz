@@ -18,21 +18,24 @@ const Game = ({ categoryId, showResult }: GameProps) => {
     const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
 
     useEffect(() => {
-        const fetchCategoryName = async () => {
-            try {
-                const response = await fetch(`https://opentdb.com/api_category.php`);
-                const data = await response.json();
-                const category = data.trivia_categories.find((cat: any) => cat.id === categoryId);
-                if (category) {
-                    setCategoryName(category.name);
-                } else {
-                    console.error('Category not found');
+        if (categoryId !== null) {
+            const fetchCategoryName = async () => {
+                try {
+                    const response = await fetch(`https://opentdb.com/api_category.php`);
+                    const data = await response.json();
+                    const category = data.trivia_categories.find((cat: any) => cat.id === categoryId);
+                    if (category) {
+                        setCategoryName(category.name);
+                    } else {
+                        console.error('Category not found');
+                    }
+                } catch (error) {
+                    console.error('Error fetching category name', error);
                 }
-            } catch (error) {
-                console.error('Error fetching category name', error);
-            }
-        };
-        fetchCategoryName();
+            };
+            fetchCategoryName();
+        }
+
     }, [categoryId]);
 
     useEffect(() => {
