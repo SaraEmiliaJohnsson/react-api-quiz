@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setCategory, setCategoryId } from "../features/actions";
 
 
 interface Category {
@@ -7,13 +9,14 @@ interface Category {
 }
 
 type WelcomeProps = {
-    setCategory: (categoryId: number) => void;
     nextScreen: () => void;
+    onSelectCategory: (categoryId: number) => void;
 }
 
 
-const Welcome = ({ setCategory, nextScreen }: WelcomeProps) => {
+const Welcome = ({ nextScreen, onSelectCategory }: WelcomeProps) => {
 
+    const dispatch = useDispatch();
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
     const [categories, setCategories] = useState<Category[]>([]);
 
@@ -26,16 +29,20 @@ const Welcome = ({ setCategory, nextScreen }: WelcomeProps) => {
     }, []);
 
     const handleCategorySelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        console.log(event.target.value);
+
         const categoryId = parseInt(event.target.value);
         const selectedCat = categories.find(cat => cat.id === categoryId);
         setSelectedCategory(selectedCat || null);
-        setCategory(categoryId);
     }
 
     const handleStart = () => {
         if (selectedCategory !== null) {
-            // setCategory(selectedCategory.id)
-            nextScreen();
+            console.log(selectedCategory);
+
+            dispatch(setCategoryId(selectedCategory.id));
+            nextScreen()
+
         } else {
             alert('Välj ett ämne innan du startar quizet!')
         }

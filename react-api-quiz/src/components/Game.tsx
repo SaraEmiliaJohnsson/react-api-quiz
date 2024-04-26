@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import { RootState } from "../main";
+import { useDispatch, useSelector } from "react-redux";
+import { setCategoryId } from "../features/actions";
 
 interface Question {
     question: string;
@@ -7,11 +10,13 @@ interface Question {
 }
 
 type GameProps = {
-    categoryId: number,
     showResult: (score: number) => void;
 }
 
-const Game = ({ categoryId, showResult }: GameProps) => {
+const Game = ({ showResult }: GameProps) => {
+    const dispatch = useDispatch();
+    const categoryId = useSelector((state: RootState) => state.category.categoryId)
+
     const [questions, setQuestions] = useState<Question[]>([]);
     const [categoryName, setCategoryName] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -50,8 +55,12 @@ const Game = ({ categoryId, showResult }: GameProps) => {
                         correct: result.incorrect_answers.length
                     }));
                     setQuestions(formattedQuestions);
+
+
                     setSelectedAnswers(new Array(formattedQuestions.length).fill(-1));
                     setIsLoading(false);
+
+
                 } else {
                     console.error('No results found');
                 }

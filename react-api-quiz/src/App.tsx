@@ -3,6 +3,8 @@ import './App.css'
 import Welcome from './components/Welcome'
 import Game from './components/Game';
 import Result from './components/Result';
+import { useDispatch } from 'react-redux';
+import { setSelectedCategory } from './features/actions';
 
 enum Screen {
   WELCOME = 'welcome',
@@ -12,12 +14,10 @@ enum Screen {
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>(Screen.WELCOME);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [score, setScore] = useState<number>(0);
+  const dispatch = useDispatch();
 
-  const handleCategorySelect = (categoryId: number) => {
-    setSelectedCategoryId(categoryId);
-  }
+
 
   const handleShowResult = (score: number) => {
     setScore(score);
@@ -29,14 +29,18 @@ function App() {
     setCurrentScreen(Screen.WELCOME);
   }
 
+  const handleCategorySelect = (categoryId: number) => {
+    dispatch(setSelectedCategory({ id: categoryId, name: 'Category name' }));
+  }
+
   let content: React.ReactElement | null = null
 
   switch (currentScreen) {
     case Screen.WELCOME:
-      content = <Welcome setCategory={handleCategorySelect} nextScreen={() => setCurrentScreen(Screen.GAME)} />
+      content = <Welcome nextScreen={() => setCurrentScreen(Screen.GAME)} onSelectCategory={handleCategorySelect} />
       break;
     case Screen.GAME:
-      content = <Game categoryId={selectedCategoryId!} showResult={handleShowResult} />
+      content = <Game showResult={handleShowResult} />
       break;
     case Screen.RESULT:
       content = <Result score={score} restartQuiz={restartQuiz} />
